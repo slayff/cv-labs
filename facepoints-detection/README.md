@@ -1,4 +1,4 @@
-`detection.py` script provides a simple CNN model (VGG-like) which is able to detect 14 main facepoints on RGB image 
+`detection.py` script provides a simple CNN model (VGG-like), which is able to detect 14 main facepoints on RGB image, 
 and helper functions so as to check model performance.
 - MSE on train dataset is 2.5137
 - MSE on test dataset is 5.6452
