@@ -10,4 +10,4 @@ and helper functions so as to check model performance.
 This may require up to 15 minutes based on performance of your machine. External GPU is recommended.
 
 ## Example of facepoints detection
-<img src="example.png" width="800">
+<img src="example.png" width="600">
