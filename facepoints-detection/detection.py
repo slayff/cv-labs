@@ -217,10 +217,10 @@ def detect(model, test_img_dir):
     return answer
 
 def train_detector(train_gt, train_img_dir, fast_train=False):
-    vggmodel = LeNet()
+    model = LeNet()
     if fast_train:
         x_train, y_train = load_train_data(train_gt, train_img_dir, small_size=True)
-        vggmodel.fit_model(x_train, y_train, fast_train=True)
+        model.fit_model(x_train, y_train, fast_train=True)
     else:
         from sklearn.model_selection import train_test_split
         x_full, y_full = load_train_data(train_gt, train_img_dir, augmentation=True, save=True)
@@ -228,5 +228,5 @@ def train_detector(train_gt, train_img_dir, fast_train=False):
                                                             y_full,
                                                             test_size=0.2,
                                                             random_state=177)
-        vggmodel.fit_model(x_train, y_train, batch_size=128, nb_epochs=100)
+        model.fit_model(x_train, y_train, batch_size=128, nb_epochs=100)
 
