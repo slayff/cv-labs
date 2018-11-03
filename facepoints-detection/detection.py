@@ -68,34 +68,41 @@ def resize_and_get_ratio(img, target_size):
     ratio = img.shape[0] /  float(target_size)
     return img_new, ratio
 
-class LeNet():
+class VggNet():
     def __init__(self):
         self.model = Sequential()
 
-        self.model.add(Conv2D(32, (3, 3), input_shape=(96, 96, 1), kernel_initializer='he_normal', padding='same'))
-        self.model.add(Activation('relu'))
-        self.model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-        self.model.add(Dropout(0.1))
+        self.model.add(Conv2D(32, (3, 3), input_shape=(96, 96, 1), padding='same', activation='relu'))
+        self.model.add(Conv2D(32, (3, 3), padding='same', activation='relu'))
+        self.model.add(MaxPooling2D((2,2), strides=2))
+        self.model.add(BatchNormalization())
 
-        self.model.add(Conv2D(64, (2, 2)))
-        self.model.add(Activation('relu'))
-        self.model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-        self.model.add(Dropout(0.1))
+        self.model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
+        self.model.add(Conv2D(64, (3, 3), padding='same', activation='relu'))
+        self.model.add(MaxPooling2D((2,2), strides=2))
+        self.model.add(BatchNormalization())
 
-        self.model.add(Conv2D(128, (2, 2)))
-        self.model.add(Activation('relu'))
-        self.model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-        self.model.add(Dropout(0.1))
+        self.model.add(Conv2D(128, (3, 3), padding='same', activation='relu'))
+        self.model.add(Conv2D(128, (3, 3), padding='same', activation='relu'))
+        self.model.add(MaxPooling2D((2,2), strides=2))
+        self.model.add(BatchNormalization())
 
-        self.model.add(Conv2D(256, (2, 2)))
-        self.model.add(Activation('relu'))
-        self.model.add(MaxPooling2D(pool_size=(2, 2), strides=(2, 2)))
-        self.model.add(Dropout(0.1))
+        self.model.add(Conv2D(256, (3, 3), padding='same', activation='relu'))
+        self.model.add(Conv2D(256, (3, 3), padding='same', activation='relu'))
+        self.model.add(MaxPooling2D((2,2), strides=2))
+        self.model.add(BatchNormalization())
+
+        self.model.add(Conv2D(512, (3, 3), padding='same', activation='relu'))
+        self.model.add(Conv2D(512, (3, 3), padding='same', activation='relu'))
+        self.model.add(MaxPooling2D((2,2), strides=2))
+        self.model.add(BatchNormalization())
 
         self.model.add(Flatten())
+        self.model.add(Dense(1024, activation='relu'))
+        self.model.add(Dense(1024, activation='relu'))
+        self.model.add(Dense(500, activation='relu'))
+        self.model.add(Dropout(0.2))
 
-        self.model.add(Dense(500, activation="relu"))
-        self.model.add(Dropout(0.1))
         self.model.add(Dense(28))
         self.model.add(Reshape((14, 2)))
 
@@ -217,7 +224,7 @@ def detect(model, test_img_dir):
     return answer
 
 def train_detector(train_gt, train_img_dir, fast_train=False):
-    model = LeNet()
+    model = VggNet()
     if fast_train:
         x_train, y_train = load_train_data(train_gt, train_img_dir, small_size=True)
         model.fit_model(x_train, y_train, fast_train=True)
@@ -229,4 +236,3 @@ def train_detector(train_gt, train_img_dir, fast_train=False):
                                                             test_size=0.2,
                                                             random_state=177)
         model.fit_model(x_train, y_train, batch_size=128, nb_epochs=100)
-
